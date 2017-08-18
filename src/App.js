@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import $ from 'jquery';
 import Poster from './Poster';
+import SearchBar from './SearchBar';
 
 class App extends Component {
 	constructor(props) {
@@ -12,6 +13,7 @@ class App extends Component {
 		this.state = {
 			moviePosters: []
 		}
+		this.handleSearch = this.handleSearch.bind(this);
 	}
 
 	// componentDidMount runs after the first render
@@ -23,6 +25,16 @@ class App extends Component {
 			console.log(movieData);
 			// changing state the trigger a re-render (i.e. render will run again)
 			// NEVER EVER change state directly
+			this.setState({
+				moviePosters: movieData.results
+			})
+		});
+	}
+
+	handleSearch(value) {
+		var url = 'http://api.themoviedb.org/3/search/movie?api_key=fec8b5ab27b292a68294261bb21b04a5&query=' + value;
+		$.getJSON(url, (movieData)=>{
+			console.log(movieData);
 			this.setState({
 				moviePosters: movieData.results
 			})
@@ -51,6 +63,7 @@ class App extends Component {
 		return (
 			<div className="App">
 				<h1>This is totally the first movie app we have made</h1>
+				<SearchBar searchFunction={this.handleSearch} />
 				{postersArray}
 			</div>
 		);
